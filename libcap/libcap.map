@@ -3,7 +3,6 @@
    Removing features is a breaking change */
 LIBCAP_2.01 {
   global:
-    __cap_lookup_name;
     cap_clear;
     cap_copy_ext;
     cap_copy_int;
