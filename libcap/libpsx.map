@@ -1,7 +1,7 @@
 /* Avoid modifying a symbol set after it has been released
    When adding features in a new release, add a new set
    Removing features is a breaking change */
-LIBPSX_1.0 {
+LIBCAP_2.01 {
   global:
     psx_load_syscalls;
     psx_set_sensitivity;
