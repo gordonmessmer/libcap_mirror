@@ -54,7 +54,7 @@ endif
 
 test:
 ifeq ($(PTHREADS),yes)
-	$(MAKE) run_psx_test run_libcap_psx_test
+	$(MAKE) run_psx_test run_libcap_test run_libcap_psx_test
 ifeq ($(SHARED),yes)
 	$(MAKE) run_b219174
 endif
@@ -74,11 +74,17 @@ run_psx_test: psx_test
 psx_test: psx_test.c $(DEPS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $< -o $@ $(LINKEXTRA) $(LIBPSXLIB)
 
+run_libcap_test: libcap_test
+	./libcap_test
+
+libcap_test: libcap_psx_test.c $(DEPS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $< -o $@ $(LINKEXTRA) $(LIBCAPLIB) -lpthread
+
 run_libcap_psx_test: libcap_psx_test
 	./libcap_psx_test
 
 libcap_psx_test: libcap_psx_test.c $(DEPS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $< -o $@ $(LINKEXTRA) $(LIBCAPLIB) $(LIBPSXLIB)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -DEXPECT_PSX_SYNC $(LDFLAGS) $< -o $@ $(LINKEXTRA) $(LIBCAPLIB) $(LIBPSXLIB)
 
 # privileged
 uns_test: uns_test.c $(DEPS)
@@ -144,6 +150,6 @@ endif
 endif
 
 clean:
-	rm -f psx_test libcap_psx_test libcap_launch_test uns_test *~
+	rm -f psx_test libcap_test libcap_psx_test libcap_launch_test uns_test *~
 	rm -f libcap_launch_test libcap_psx_launch_test core noop
 	rm -f exploit noexploit exploit.o weaver.so b219174
